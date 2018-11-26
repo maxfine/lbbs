@@ -177,6 +177,13 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * ---------------------------------------------------------
+         * 第三方扩展
+         * ---------------------------------------------------------
+         */
+        App\Providers\EasySmsServiceProvider::class,
+
     ],
 
     /*
