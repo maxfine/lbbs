@@ -19,6 +19,9 @@ $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api'
 ], function($api) {
     $api->group([
+        'middleware' => 'api.throttle',
+        'expires' => config('api.rate_limits.sign.expires'),
+        'limit' => config('api.rate_limits.sign.limit'),
     ], function($api) {
         $api->post('captchas', 'CaptchasController@store')->name('api.captchas.store');
         $api->post('verificationCodes', 'VerificationCodesController@store')
