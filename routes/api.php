@@ -16,7 +16,8 @@ use Illuminate\Http\Request;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-    'namespace' => 'App\Http\Controllers\Api'
+    'namespace' => 'App\Http\Controllers\Api',
+    'middleware' => ['bindings']
 ], function($api) {
     $api->group([
         'middleware' => 'api.throttle',
@@ -37,6 +38,35 @@ $api->version('v1', [
             ->name('api.authorizations.update');
         $api->delete('authorizations/current', 'AuthorizationsController@destory')
             ->name('api.authorizations.destory');
+    });
+
+    $api->group([
+        'middleware' => 'api.throttle',
+        'limit' => config('api.rate_limits.access.limit'),
+        'expires' => config('api.rate_limits.access.expires'),
+    ], function ($api) {
+        // 游客可以访问的接口
+
+        // 需要 token 验证的接口
+        $api->group(['middleware' => 'api.auth'], function($api) {
+            // 当前登录用户信息
+            $api->get('user', 'UsersController@me')
+                ->name('api.user.show');
+            $api->patch('user', 'UsersController@update')
+                ->name('api.user.update');
+            $api->post('images', 'ImagesController@store')
+                ->name('api.images.store');
+
+            $api->post('topics', 'TopicsController@store')
+                ->name('api.topics.store');
+            $api->patch('topics/{topic}', 'TopicsController@update')
+                ->name('api.topics.update');
+        });
+
+        $api->get('categories', 'CategoriesController@index')
+            ->name('api.categories.index');
+        $api->get('topics/{topic}', 'TopicsController@show')
+            ->name('api.topics.show');
     });
 });
 

@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Transformers;
+
+use App\Models\DummyClass;
+use League\Fractal\TransformerAbstract;
+
+class DummyClassTransformer extends TransformerAbstract
+{
+    public function transform(DummyClass $dummyInstance)
+    {
+        return [
+            'id' => $dummyInstance->id,
+        ];
+    }
+}

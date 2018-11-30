@@ -39,10 +39,11 @@ class UserRequest extends FormRequest
                         'regex:/^[a-zA-Z0-9\_]+$/',
                         'unique:users,name,'. $uid
                     ],
-                    'password' => 'required|string|min:6',
-                    'verification_key' => 'required|string',
-                    'verification_code' => 'required|string'
+                    'email' => 'email',
+                    'introduction' => 'max:80',
+                    'avatar_image_id' => 'integer|exists:images,id,type,avatar,user_id,'. $uid
                 ];
+            break;
         }
     }
 
@@ -51,6 +52,7 @@ class UserRequest extends FormRequest
         return [
             'verification_key' => '短信验证码 key',
             'verification_code' => '短信验证码',
+            'introduction' => '个人简介',
         ];
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\UserRequest;
 use App\Models\User;
+use App\Transformers\UserTransformer;
+use App\Models\Image;
 
 class UsersController extends Controller
 {
@@ -31,5 +33,29 @@ class UsersController extends Controller
         \Cache::forget($verificationKey);
 
         return $this->response->created();
+    }
+
+    public function me()
+    {
+        $user = \Auth::guard('api')->user();
+
+        return $this->response->item($user, new UserTransformer());
+    }
+
+    public function update(UserRequest $request)
+    {
+        $user = \Auth::guard('api')->user();
+
+        $user->name = $request->name;
+        $user->email = $request->eamil;
+        $user->introduction = $request->introduction;
+
+        if($imageId = $request->avatar_image_id) {
+            $image = Image::find($imageId);
+            $user->avatar = $image->path;
+        }
+        $user->save();
+
+        return $this->response->item($user, new UserTransformer());
     }
 }
