@@ -63,6 +63,11 @@ $api->version('v1', [
                 ->name('api.topics.update');
             $api->delete('topics/{topic}', 'TopicsController@destory')
                 ->name('api.topics.destory');
+
+            $api->post('topics/{topic}/replies', 'RepliesController@store')
+                ->name('api.topics.replies.store');
+            $api->delete('replies/{reply}', 'RepliesController@destory')
+                ->name('api.replies.destory');
         });
 
         $api->get('categories', 'CategoriesController@index')
@@ -74,6 +79,11 @@ $api->version('v1', [
             ->name('api.topics.show');
         $api->get('user/{user}/topics', 'TopicsController@userIndex')
             ->name('api.user.topics.index');
+
+        $api->get('topics/{topic}/{replies}', 'RepliesController@index')
+            ->name('api.topics.replies.index');
+        $api->get('users/{user}/replies', 'RepliesController@userIndex')
+            ->name('api.users.replies.index');
     });
 });
 
