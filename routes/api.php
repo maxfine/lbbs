@@ -59,8 +59,6 @@ $api->version('v1', [
 
             $api->post('topics', 'TopicsController@store')
                 ->name('api.topics.store');
-            $api->get('topics/{topic}', 'TopicsController@show')
-                ->name('api.topics.show');
             $api->patch('topics/{topic}', 'TopicsController@update')
                 ->name('api.topics.update');
             $api->delete('topics/{topic}', 'TopicsController@destory')
@@ -69,8 +67,13 @@ $api->version('v1', [
 
         $api->get('categories', 'CategoriesController@index')
             ->name('api.categories.index');
+
+        $api->get('topics', 'TopicsController@index')
+            ->name('api.topics.index');
         $api->get('topics/{topic}', 'TopicsController@show')
             ->name('api.topics.show');
+        $api->get('user/{user}/topics', 'TopicsController@userIndex')
+            ->name('api.user.topics.index');
     });
 });
 
