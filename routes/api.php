@@ -59,8 +59,12 @@ $api->version('v1', [
 
             $api->post('topics', 'TopicsController@store')
                 ->name('api.topics.store');
+            $api->get('topics/{topic}', 'TopicsController@show')
+                ->name('api.topics.show');
             $api->patch('topics/{topic}', 'TopicsController@update')
                 ->name('api.topics.update');
+            $api->delete('topics/{topic}', 'TopicsController@destory')
+                ->name('api.topics.destory');
         });
 
         $api->get('categories', 'CategoriesController@index')
