@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('topics/{topic}', 'TopicsController@show')
+    ->name('topics.show');

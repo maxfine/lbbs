@@ -68,6 +68,13 @@ $api->version('v1', [
                 ->name('api.topics.replies.store');
             $api->delete('replies/{reply}', 'RepliesController@destory')
                 ->name('api.replies.destory');
+
+            $api->get('user/notifications', 'NotificationsController@index')
+                ->name('api.user.notifications.index');
+            $api->get('user/notifications/stats', 'NotificationsController@stats')
+                ->name('api.user.notifications.stats');
+            $api->patch('user/notifications/read', 'NotificationsController@read')
+                ->name('api.user.notifications.read');
         });
 
         $api->get('categories', 'CategoriesController@index')
