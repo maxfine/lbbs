@@ -94,6 +94,9 @@ $api->version('v1', [
             ->name('api.topics.replies.index');
         $api->get('users/{user}/replies', 'RepliesController@userIndex')
             ->name('api.users.replies.index');
+
+        $api->get('links', 'LinksController@index')
+            ->name('api.links.index');
     });
 });
 

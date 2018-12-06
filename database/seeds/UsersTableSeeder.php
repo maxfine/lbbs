@@ -12,7 +12,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
 
         $users = factory(User::class)->times(10)->make()->each(function ($user, $index) use ($faker) {
