@@ -75,6 +75,9 @@ $api->version('v1', [
                 ->name('api.user.notifications.stats');
             $api->patch('user/notifications/read', 'NotificationsController@read')
                 ->name('api.user.notifications.read');
+
+            $api->get('user/permissions', 'PermissionsControllerController@index')
+                ->name('api.user.permissions.index');
         });
 
         $api->get('categories', 'CategoriesController@index')
