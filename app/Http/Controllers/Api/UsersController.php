@@ -44,17 +44,16 @@ class UsersController extends Controller
 
     public function update(UserRequest $request)
     {
-        $user = \Auth::guard('api')->user();
+        $user = $this->user();
 
-        $user->name = $request->name;
-        $user->email = $request->eamil;
-        $user->introduction = $request->introduction;
+        $attributes = $request->only(['name', 'email', 'introduction', 'registration_id']);
 
-        if($imageId = $request->avatar_image_id) {
-            $image = Image::find($imageId);
-            $user->avatar = $image->path;
+        if ($request->avatar_image_id) {
+            $image = Image::find($request->avatar_image_id);
+
+            $attributes['avatar'] = $image->path;
         }
-        $user->save();
+        $user->update($attributes);
 
         return $this->response->item($user, new UserTransformer());
     }

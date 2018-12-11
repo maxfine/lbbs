@@ -6,9 +6,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Traits\ActiveUserHelper;
 
 class User extends Authenticatable implements JWTSubject
 {
+    use ActiveUserHelper;
     use HasRoles;
     use Notifiable;
     use Notifiable {
@@ -22,7 +24,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $fillable = [
         'name', 'phone', 'email', 'password', 'introduction', 'avatar',
-        'weixin_openid', 'weixin_unionid'
+        'weixin_openid', 'weixin_unionid', 'registration_id'
     ];
 
     /**
@@ -70,6 +72,11 @@ class User extends Authenticatable implements JWTSubject
         $this->save();
 
         $this->unreadNotifications->markAsRead();
+    }
+
+    public function calculateAndCacheActiveUsers()
+    {
+        return $this->getActiveUsers();
     }
 
 }
