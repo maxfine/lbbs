@@ -59,8 +59,8 @@ class AuthorizationsController extends Controller
                 break;
         }
 
-        $token = \Auth::guard('api')->fromUser($user);
-        return $this->responseWithToken($token)->setStatusCode(201);
+        $result = $this->getBearerTokenByUser($user, '1', false);
+        return $this->response->array($result)->setStatusCode(201);
     }
 
     public function store(AuthorizationRequest $originRequest, AuthorizationServer $server, ServerRequestInterface $serverRequest)
@@ -85,14 +85,5 @@ class AuthorizationsController extends Controller
     {
         $this->user()->token()->revoke();
         return $this->response->noContent();
-    }
-
-    protected function responseWithToken($token)
-    {
-        return $this->response->array([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => \Auth::guard('api')->factory()->getTTL() * 60
-        ]);
     }
 }
