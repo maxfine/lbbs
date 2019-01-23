@@ -13,7 +13,7 @@ class TopicsController extends Controller
     public function index(Request $request, Topic $topic)
     {
         $query = $topic->query();
-        if($category_id = $request->category_id) {
+        if ($category_id = $request->category_id) {
             $query = $query->where('category_id', $category_id);
         }
 

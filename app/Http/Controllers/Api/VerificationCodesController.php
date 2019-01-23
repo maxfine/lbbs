@@ -12,16 +12,16 @@ class VerificationCodesController extends Controller
     public function store(VerificationCodeRequest $request, EasySms $easySms)
     {
         $captchaData = \Cache::get($request->captcha_key);
-        if(empty($captchaData)) {
+        if (empty($captchaData)) {
             $this->response->error('图片验证码已失效', 422);
         }
-        if(!hash_equals(Str::lower($request->get('captcha_code')),  Str::lower($captchaData['code']))) {
+        if (!hash_equals(Str::lower($request->get('captcha_code')),  Str::lower($captchaData['code']))) {
             \Cache::forget($request->captcha_key);
             $this->response->errorUnauthorized('图片验证码不正确');
         }
 
         $phone = $captchaData['phone'];
-        if(!app()->environment('production')) {
+        if (!app()->environment('production')) {
             $code = '123456';
         } else {
             try {

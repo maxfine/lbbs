@@ -10,19 +10,22 @@ use Zend\Diactoros\Response as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\AuthorizationServer;
+use App\Traits\PassportToken;
 
 class AuthorizationsController extends Controller
 {
+    use PassportToken;
+    
     public function socialStore($type, SocialAuthorizationRequest $request)
     {
-        if(!in_array($type, ['weixin'])) {
+        if (!in_array($type, ['weixin'])) {
             return $this->response->errorBadRequest();
         }
 
         $driver = \Socialite::driver($type);
 
         try {
-            if($code = $request->code) {
+            if ($code = $request->code) {
                 $response = $driver->getAccessTokenResponse($code);
                 $token = array_get($response, 'access_token');
             } else {
@@ -32,7 +35,7 @@ class AuthorizationsController extends Controller
                     $driver->setOpenId($request->openid);
                 }
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->response->errorUnauthorized('参数错误，未获取用户信息');
         }
 
@@ -41,13 +44,13 @@ class AuthorizationsController extends Controller
         switch ($type) {
             case 'weixin':
                 $unionid = !empty($oauthUser['unionid']) ? $oauthUser['unionid'] : null;
-                if($unionid) {
+                if ($unionid) {
                     $user = User::where('weixin_unionid', $unionid)->first();
                 } else {
                     $user = User::where('weixin_openid', $oauthUser->getId())->first();
                 }
 
-                if(!$user) {
+                if (!$user) {
                     $user = User::create([
                         'name' => $oauthUser->getNickname(),
                         'avatar' => $oauthUser->getAvatar(),
@@ -76,7 +79,7 @@ class AuthorizationsController extends Controller
     {
         try {
             return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response);
-        } catch(OAuthServerException $e) {
+        } catch (OAuthServerException $e) {
             return $this->response->errorUnauthorized($e->getMessage());
         }
     }

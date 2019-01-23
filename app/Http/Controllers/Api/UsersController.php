@@ -16,7 +16,7 @@ class UsersController extends Controller
         $verificationCode = $request->verification_code;
 
         $verifyData = \Cache::get($verificationKey);
-        if(!$verifyData) {
+        if (!$verifyData) {
             $this->response->error('验证码已失效', 422);
         }
 
@@ -50,7 +50,7 @@ class UsersController extends Controller
         $user->email = $request->eamil;
         $user->introduction = $request->introduction;
 
-        if($imageId = $request->avatar_image_id) {
+        if ($imageId = $request->avatar_image_id) {
             $image = Image::find($imageId);
             $user->avatar = $image->path;
         }

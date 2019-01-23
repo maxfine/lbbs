@@ -15,5 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('topics', 'TopicsController@index')
+    ->name('topics.index');
 Route::get('topics/{topic}', 'TopicsController@show')
     ->name('topics.show');
